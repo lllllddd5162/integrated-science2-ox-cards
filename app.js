@@ -27,13 +27,13 @@ const subName = k => { const u = UNITS.find(u => u.no === k.slice(0, 2)); return
 
 let ITEMS = [];
 let ST = {
-  set: { subs: [], src: "all", cnt: "20", mode: "learn", mark: false, one: true, open: [], lv: ["중요", "고난도", "지엽", "일반"], lv4: true },
+  set: { subs: [], src: "all", cnt: "30", mode: "learn", mark: false, one: true, open: [], lv: ["중요", "고난도", "지엽", "일반"], lv4: true },
   stats: {}            // code -> { n: 푼 횟수, ok: 맞힌 횟수, w: 틀린 횟수, s: 연속 정답 }
 };
 let RUN = null;        // { cards, i, answers:[{c, my, ok}], mode, locked }
 
 /* ---------- 저장 ---------- */
-function load() { try { const d = JSON.parse(localStorage.getItem(KEY) || "null"); if (d) { ST.set = Object.assign(ST.set, d.set || {}); ST.stats = d.stats || {}; if (!(d.set && d.set.lv4)) { ST.set.lv = LEVELS.slice(); ST.set.lv4 = true; } } } catch (e) { } }
+function load() { try { const d = JSON.parse(localStorage.getItem(KEY) || "null"); if (d) { ST.set = Object.assign(ST.set, d.set || {}); ST.stats = d.stats || {}; if (ST.set.cnt === "10" || ST.set.cnt === "20") ST.set.cnt = "30"; if (!(d.set && d.set.lv4)) { ST.set.lv = LEVELS.slice(); ST.set.lv4 = true; } } } catch (e) { } }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(ST)); } catch (e) { } }
 const inWrong = c => { const s = ST.stats[c]; return !!(s && s.w > 0 && s.s < 2); };
 
@@ -271,12 +271,12 @@ function bind() {
   $("#allOn").onclick = () => { ST.set.subs = UNITS.flatMap(u => Object.keys(u.subs).map(s => u.no + "-" + s)); save(); syncTree(); };
   $("#allOff").onclick = () => { ST.set.subs = []; save(); syncTree(); };
   segInit("#srcSeg", "src"); segInit("#cntSeg", "cnt");
-  const ci = $("#cntInput"), cc = $("#cntCustom"), presets = ["10", "20", "30", "0"];
+  const ci = $("#cntInput"), cc = $("#cntCustom"), presets = ["30", "50", "100", "0"];
   ci.value = presets.includes(ST.set.cnt) ? "" : ST.set.cnt; cc.classList.toggle("on", !presets.includes(ST.set.cnt));
   ci.addEventListener("input", () => {
     const n = Math.floor(+ci.value);
     if (!ci.value || !(n >= 1)) return;
-    ST.set.cnt = String(Math.min(n, 934));
+    ST.set.cnt = String(Math.min(n, 1367));
     $("#cntSeg").querySelectorAll("button").forEach(b => b.setAttribute("aria-checked", b.dataset.v === ST.set.cnt));
     cc.classList.add("on"); save(); updatePool();
   });

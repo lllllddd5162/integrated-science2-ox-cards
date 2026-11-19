@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>통합과학2 OX</title>
+<meta name="description" content="통합과학2 OX 카드 학습 · 완자 통합과학2(2022 개정) 범위">
+<meta name="theme-color" content="#f4f5f7">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="통합과학2 OX">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 홈: 범위 선택 -->
+<section id="home" class="screen">
+  <header class="top">
+    <h1>통합과학2 <span class="ox-mark"><b class="o">O</b><b class="x">X</b></span></h1>
+    <p class="sub">2022 개정 통합과학2 · <span id="totalN">0</span>문항</p>
+  </header>
+
+  <div class="card-box stats-box" id="statsBox"></div>
+
+  <div class="card-box">
+    <div class="row-h"><h2>범위</h2><div class="mini-btns"><button type="button" id="allOn">전체</button><button type="button" id="allOff">해제</button></div></div>
+    <div id="tree" class="tree"></div>
+  </div>
+
+  <div class="card-box">
+    <h2>문항</h2>
+    <div class="seg" id="srcSeg" role="radiogroup" aria-label="출제 대상">
+      <button type="button" data-v="all" role="radio">전체</button>
+      <button type="button" data-v="new" role="radio">안 푼 문항</button>
+      <button type="button" data-v="wrong" role="radio">오답노트</button>
+    </div>
+    <h3>장 수</h3>
+    <div class="seg" id="cntSeg" role="radiogroup" aria-label="장 수">
+      <button type="button" data-v="10" role="radio">10</button>
+      <button type="button" data-v="20" role="radio">20</button>
+      <button type="button" data-v="30" role="radio">30</button>
+      <button type="button" data-v="0" role="radio">전부</button>
+    </div>
+    <h3>해설 보기</h3>
+    <div class="seg" id="modeSeg" role="radiogroup" aria-label="해설 보기">
+      <button type="button" data-v="learn" role="radio">카드마다 바로</button>
+      <button type="button" data-v="test" role="radio">다 풀고 한꺼번에</button>
+    </div>
+    <h3>구분</h3>
+    <div class="seg lv" id="lvSeg" role="group" aria-label="구분"><button type="button" data-v="중요" role="checkbox">중요</button><button type="button" data-v="일반" role="checkbox">일반</button><button type="button" data-v="지엽" role="checkbox">지엽</button></div>
+    <label class="chk"><input type="checkbox" id="optMark"> 교재 표시(탐구·암기해·주의해·1등급) 문항만</label>
+    <label class="chk"><input type="checkbox" id="optOne"> 같은 개념은 한 장만</label>
+  </div>
+
+  <div class="start-bar">
+    <p id="poolNote" class="pool-note"></p>
+    <button type="button" class="btn-primary" id="startBtn">시작하기</button>
+  </div>
+  <p class="foot"><button type="button" class="linkbtn" id="expBtn">기록 내보내기</button> · <button type="button" class="linkbtn" id="impBtn">기록 불러오기</button> · <button type="button" class="linkbtn" id="resetBtn">내 기록 지우기</button><input type="file" id="impFile" accept="application/json,.json" hidden></p>
+</section>
+
+<!-- 풀기 -->
+<section id="play" class="screen" hidden>
+  <div class="play-top">
+    <button type="button" class="icon-btn" id="quitBtn" aria-label="그만하기">✕</button>
+    <div class="progress"><div class="bar" id="progBar"></div></div>
+    <span class="prog-txt" id="progTxt">1 / 20</span>
+  </div>
+  <div class="deck" id="deck"></div>
+  <p class="hint" id="hint">카드를 오른쪽으로 밀면 O, 왼쪽으로 밀면 X</p>
+  <div class="answer-bar" id="answerBar">
+    <button type="button" class="ans-btn x" data-ans="X" aria-label="X">X</button>
+    <button type="button" class="ans-btn o" data-ans="O" aria-label="O">O</button>
+  </div>
+  <div class="next-bar" id="nextBar" hidden>
+    <button type="button" class="btn-primary" id="nextBtn">다음 카드</button>
+  </div>
+</section>
+
+<!-- 결과 -->
+<section id="result" class="screen" hidden>
+  <header class="top"><h1>결과</h1><p class="sub" id="resSub"></p></header>
+  <div class="card-box score-box">
+    <div class="score"><span id="scoreN">0</span><small> / <span id="scoreT">0</span></small></div>
+    <div class="score-rate" id="scoreRate"></div>
+  </div>
+  <div class="card-box"><h2>소단원별</h2><div id="bySub"></div></div>
+  <div class="res-actions">
+    <button type="button" class="btn-primary" id="retryWrong">틀린 것만 다시 풀기</button>
+    <button type="button" class="btn-ghost" id="toHome">처음으로</button>
+  </div>
+  <div class="card-box"><div class="row-h"><h2>문항 확인</h2><label class="chk inline"><input type="checkbox" id="onlyWrongList" checked> 틀린 것만</label></div><div id="resList"></div></div>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>

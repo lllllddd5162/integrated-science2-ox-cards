@@ -276,7 +276,7 @@ function bind() {
   ci.addEventListener("input", () => {
     const n = Math.floor(+ci.value);
     if (!ci.value || !(n >= 1)) return;
-    ST.set.cnt = String(Math.min(n, 1367));
+    ST.set.cnt = String(Math.min(n, 1363));
     $("#cntSeg").querySelectorAll("button").forEach(b => b.setAttribute("aria-checked", b.dataset.v === ST.set.cnt));
     cc.classList.add("on"); save(); updatePool();
   });

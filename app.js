@@ -271,21 +271,22 @@ function bind() {
   $("#allOn").onclick = () => { ST.set.subs = UNITS.flatMap(u => Object.keys(u.subs).map(s => u.no + "-" + s)); save(); syncTree(); };
   $("#allOff").onclick = () => { ST.set.subs = []; save(); syncTree(); };
   segInit("#srcSeg", "src"); segInit("#cntSeg", "cnt");
-  const ci = $("#cntInput"), presets = ["10", "20", "30", "0"];
-  ci.value = presets.includes(ST.set.cnt) ? "" : ST.set.cnt;
+  const ci = $("#cntInput"), cc = $("#cntCustom"), presets = ["10", "20", "30", "0"];
+  ci.value = presets.includes(ST.set.cnt) ? "" : ST.set.cnt; cc.classList.toggle("on", !presets.includes(ST.set.cnt));
   ci.addEventListener("input", () => {
     const n = Math.floor(+ci.value);
     if (!ci.value || !(n >= 1)) return;
     ST.set.cnt = String(Math.min(n, 934));
     $("#cntSeg").querySelectorAll("button").forEach(b => b.setAttribute("aria-checked", b.dataset.v === ST.set.cnt));
-    save(); updatePool();
+    cc.classList.add("on"); save(); updatePool();
   });
-  ci.addEventListener("blur", () => { if (!presets.includes(ST.set.cnt)) ci.value = ST.set.cnt; else ci.value = ""; });
-  $("#cntSeg").addEventListener("click", () => { ci.value = ""; });
+  ci.addEventListener("blur", () => { const c = !presets.includes(ST.set.cnt); ci.value = c ? ST.set.cnt : ""; cc.classList.toggle("on", c); });
+  $("#cntSeg").addEventListener("click", e => { if (e.target.closest("button")) { ci.value = ""; cc.classList.remove("on"); } });
   const lvEl = $("#lvSeg");
   const lvSync = () => lvEl.querySelectorAll("button").forEach(b => b.setAttribute("aria-checked", ST.set.lv.includes(b.dataset.v)));
   lvEl.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; const s = new Set(ST.set.lv); s.has(b.dataset.v) ? s.delete(b.dataset.v) : s.add(b.dataset.v); ST.set.lv = LEVELS.filter(x => s.has(x)); lvSync(); save(); updatePool(); });
   lvSync();
+  segInit("#modeSeg", "mode");
   $("#optMark").checked = ST.set.mark; $("#optOne").checked = ST.set.one;
   $("#optMark").onchange = e => { ST.set.mark = e.target.checked; save(); updatePool(); };
   $("#optOne").onchange = e => { ST.set.one = e.target.checked; save(); updatePool(); };

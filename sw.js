@@ -1,5 +1,5 @@
 // 오프라인용 서비스 워커: 한 번 연 뒤에는 인터넷 없이도 열리고, 온라인이면 다음 실행 때 최신 파일로 바뀝니다.
-const CACHE = "is2-ox-cards-v3";
+const CACHE = "is2-ox-cards-v4";
 const SHELL = ["./", "index.html", "style.css", "app.js", "data/items.json", "manifest.json", "icons/icon-192.png", "icons/icon-512.png"];
 
 self.addEventListener("install", e => {

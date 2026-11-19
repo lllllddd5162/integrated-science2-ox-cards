@@ -18,7 +18,7 @@ const UNITS = [
   { no: "14", title: "과학 기술의 발전과 쟁점", subs: { A: "사물 인터넷과 인공지능", B: "과학 기술의 유용성과 한계", C: "과학 관련 사회적 쟁점과 과학 윤리" } }
 ];
 const MARKS = ["탐구", "암기해", "주의해", "1등급"];
-const LEVELS = ["중요", "일반", "지엽"];
+const LEVELS = ["중요", "고난도", "지엽", "일반"];
 const KEY = "is2-ox-cards-v1";
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -27,13 +27,13 @@ const subName = k => { const u = UNITS.find(u => u.no === k.slice(0, 2)); return
 
 let ITEMS = [];
 let ST = {
-  set: { subs: [], src: "all", cnt: "20", mode: "learn", mark: false, one: true, open: [], lv: ["중요", "일반", "지엽"] },
+  set: { subs: [], src: "all", cnt: "20", mode: "learn", mark: false, one: true, open: [], lv: ["중요", "고난도", "지엽", "일반"], lv4: true },
   stats: {}            // code -> { n: 푼 횟수, ok: 맞힌 횟수, w: 틀린 횟수, s: 연속 정답 }
 };
 let RUN = null;        // { cards, i, answers:[{c, my, ok}], mode, locked }
 
 /* ---------- 저장 ---------- */
-function load() { try { const d = JSON.parse(localStorage.getItem(KEY) || "null"); if (d) { ST.set = Object.assign(ST.set, d.set || {}); ST.stats = d.stats || {}; } } catch (e) { } }
+function load() { try { const d = JSON.parse(localStorage.getItem(KEY) || "null"); if (d) { ST.set = Object.assign(ST.set, d.set || {}); ST.stats = d.stats || {}; if (!(d.set && d.set.lv4)) { ST.set.lv = LEVELS.slice(); ST.set.lv4 = true; } } } catch (e) { } }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(ST)); } catch (e) { } }
 const inWrong = c => { const s = ST.stats[c]; return !!(s && s.w > 0 && s.s < 2); };
 
@@ -86,7 +86,7 @@ function updatePool() {
   const P = pool(), want = +ST.set.cnt || P.length;
   const btn = $("#startBtn");
   if (!ST.set.subs.length) { $("#poolNote").textContent = "범위를 하나 이상 골라 주세요."; btn.disabled = true; return; }
-  if (!ST.set.lv.length) { $("#poolNote").textContent = "구분(중요·일반·지엽)을 하나 이상 골라 주세요."; btn.disabled = true; return; }
+  if (!ST.set.lv.length) { $("#poolNote").textContent = "구분(중요·고난도·지엽·일반)을 하나 이상 골라 주세요."; btn.disabled = true; return; }
   if (!P.length) { $("#poolNote").textContent = ST.set.src === "wrong" ? "이 범위에는 오답노트 문항이 없어요." : ST.set.src === "new" ? "이 범위의 문항은 모두 풀었어요." : "조건에 맞는 문항이 없어요."; btn.disabled = true; return; }
   btn.disabled = false;
   $("#poolNote").textContent = `범위 안 ${P.length}문항 중 ${Math.min(want, P.length)}장${ST.set.one ? " (같은 개념은 한 장만)" : ""}`;
